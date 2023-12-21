@@ -44,12 +44,17 @@ class ProfileActivity : AppCompatActivity() {
 
 //        textFullName = findViewById(R.id.tvName)
         binding.tvName.text = " ${emailSuccess}"
-        binding.tvEmail.text = " ${emailSuccess}"
 
 //        textEmail = findViewById(R.id.tvEmail)
         btnLogout = findViewById(R.id.btLogout)
 
 //        profileViewModel = ViewModelProvider(this).get(ProfileViewModel::class.java)
+
+        profileViewModel.getSession().observe(this) { session ->
+            if (session.isLogin) {
+                binding.tvEmail.text = session.email
+            }
+        }
 
         profileViewModel.userFullName.observe(this) { fullName ->
             textFullName.text = fullName
