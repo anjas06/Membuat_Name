@@ -161,7 +161,7 @@ class LoginActivity : AppCompatActivity() {
                                 loginResult.loginResult?.token?.let { token ->
 //                                    val name = LoginResult
                                     emailSuccess= email
-                                    loginViewModel.saveSession(UserModel(email, token, true))
+                                    loginViewModel.saveSession(UserModel(loginResult.loginResult.name!!, email, token, true))
                                     AlertDialog.Builder(this@LoginActivity).apply {
                                         setTitle("Login")
                                         setMessage("Berhasil Login, selamat datang $email")

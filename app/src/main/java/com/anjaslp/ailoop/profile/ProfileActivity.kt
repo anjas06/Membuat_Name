@@ -42,8 +42,6 @@ class ProfileActivity : AppCompatActivity() {
         progressDialog.setTitle("Logging")
         progressDialog.setMessage("Silahkan tunggu...")
 
-//        textFullName = findViewById(R.id.tvName)
-        binding.tvName.text = " ${emailSuccess}"
 
 //        textEmail = findViewById(R.id.tvEmail)
         btnLogout = findViewById(R.id.btLogout)
@@ -53,6 +51,7 @@ class ProfileActivity : AppCompatActivity() {
         profileViewModel.getSession().observe(this) { session ->
             if (session.isLogin) {
                 binding.tvEmail.text = session.email
+                binding.tvName.text = session.name
             }
         }
 
