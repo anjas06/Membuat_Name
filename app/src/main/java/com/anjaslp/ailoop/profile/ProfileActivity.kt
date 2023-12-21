@@ -53,6 +53,7 @@ class ProfileActivity : AppCompatActivity() {
         profileViewModel.getSession().observe(this) { session ->
             if (session.isLogin) {
                 binding.tvEmail.text = session.email
+                binding.tvName.text = session.name
             }
         }
 

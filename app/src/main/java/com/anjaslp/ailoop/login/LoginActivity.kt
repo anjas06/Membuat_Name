@@ -36,11 +36,6 @@ class LoginActivity : AppCompatActivity() {
         ViewModelFactory.getInstance(this)
     }
 
-//    override fun onStart() {
-//        super.onStart()
-////        loginViewModel.checkUserLoggedIn()
-//    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
@@ -50,29 +45,6 @@ class LoginActivity : AppCompatActivity() {
         progressDialog.setTitle("Logging")
         progressDialog.setMessage("Silahkan tunggu...")
 
-//        loginViewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
-
-//        loginViewModel.loginResult.observe(this, { loggedIn ->
-//            if (loggedIn) {
-//                startActivity(Intent(this, HomeActivity::class.java))
-//            }
-//        })
-
-//        loginViewModel.errorMessage.observe(this, { error ->
-//            progressDialog.dismiss()
-//            Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
-//        })
-
-//        binding.btLogin.setOnClickListener {
-//            if (binding.editEmail.text.isNotEmpty() && binding.editPassword.text.isNotEmpty()) {
-//                val email = binding.editEmail.text.toString()
-//                val password = binding.editPassword.text.toString()
-//                loginViewModel.login(email, password)
-//                progressDialog.show()
-//            } else {
-//                Toast.makeText(this, "Silahkan isi Email dan Password terlebih dahulu", Toast.LENGTH_SHORT).show()
-//            }
-//        }
         setupView()
         setupAction()
 
@@ -94,55 +66,6 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun setupAction() {
-//        binding.btLogin.setOnClickListener {
-//            lifecycleScope.launch {
-//                val email = binding.editEmail.text.toString().trim()
-//                val password = binding.editPassword.text.toString().trim()
-//                loginViewModel.login(email, password).observe(this@LoginActivity) {
-//                    when (it) {
-//                        is Result.Loading -> {
-//                            binding.progressBar.visibility = View.VISIBLE
-//                        }
-//
-//                        is Result.Success -> {
-//                            loginViewModel.saveSession(UserModel(email, it.data.loginResult?.token!!,true))
-//                            AlertDialog.Builder(this@LoginActivity).apply {
-//                                setTitle("Login")
-//                                setMessage("Berhasil Login, selamat datang $email")
-//                                setPositiveButton("Masuk") { _, _ ->
-//                                    val loginIntent =
-//                                        Intent(context, MainActivity::class.java)
-//                                    loginIntent.flags =
-//                                        Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-//                                    startActivity(loginIntent)
-//                                    finish()
-//                                }
-//                                create()
-//                                show()
-//                            }
-//                        }
-//
-//                        is Result.Error -> {
-//                            AlertDialog.Builder(this@LoginActivity).apply {
-//                                setTitle("Login")
-//                                setMessage("Periksa kembali email dan password anda")
-//                                setPositiveButton("Ulangi") { _, _ ->
-//                                    val loginIntent =
-//                                        Intent(this@LoginActivity, LoginActivity::class.java)
-//                                    loginIntent.flags =
-//                                        Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-//                                    startActivity(loginIntent)
-//                                }
-//                                create()
-//                                show()
-//                            }
-//                        }
-//
-//                        else -> {}
-//                    }
-//                }
-//            }
-//        }
 
         // In LoginActivity.kt
         binding.btLogin.setOnClickListener {
@@ -156,15 +79,15 @@ class LoginActivity : AppCompatActivity() {
                         }
 
                         is Result.Success -> {
-                            // Check for null values before accessing properties
-                            it.data?.let { loginResult ->
-                                loginResult.loginResult?.token?.let { token ->
-//                                    val name = LoginResult
-                                    emailSuccess= email
-                                    loginViewModel.saveSession(UserModel(email, token, true))
+                            it.data?.let { loginResponse ->
+                                val loginResult = loginResponse.loginResult
+                                if (loginResult != null) {
+                                    val name = loginResult.name ?: "NamaDefault" // Ganti "NamaDefault" dengan nilai default yang sesuai
+                                    emailSuccess = email
+                                    loginViewModel.saveSession(UserModel(name = name, email = email, token = loginResult.token ?: "", isLogin = true))
                                     AlertDialog.Builder(this@LoginActivity).apply {
                                         setTitle("Login")
-                                        setMessage("Berhasil Login, selamat datang $email")
+                                        setMessage("Berhasil Login, selamat datang $name")
                                         setPositiveButton("Masuk") { _, _ ->
                                             val loginIntent = Intent(context, MainActivity::class.java)
                                             loginIntent.flags =
@@ -175,6 +98,8 @@ class LoginActivity : AppCompatActivity() {
                                         create()
                                         show()
                                     }
+                                } else {
+                                    // Tangani jika loginResult null
                                 }
                             }
                         }
