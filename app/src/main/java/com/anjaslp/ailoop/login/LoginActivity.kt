@@ -75,7 +75,10 @@ class LoginActivity : AppCompatActivity() {
 //        }
         setupView()
         setupAction()
+
     }
+
+
 
     private fun setupView() {
         @Suppress("DEPRECATION")
